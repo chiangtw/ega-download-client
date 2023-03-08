@@ -185,7 +185,7 @@ class DataFile:
                 f.write(received_file_md5.encode())
         else:
             #os.remove(output_file)
-            raise Exception(f"Download process expected md5 value '{check_sum}' but got '{received_file_md5}'")
+            raise MD5Exception(f"Download process expected md5 value '{check_sum}' but got '{received_file_md5}'")
 
     def download_file_slice_(self, args):
         return self.download_file_slice(*args)
@@ -324,6 +324,8 @@ class DataFile:
             try:
                 self.download_file(output_file, num_connections, max_slice_size)
                 done = True
+            except MD5Exception as e:
+                raise e
             except Exception as e:
                 if e is ConnectionError:
                     logging.info("Failed to connect to data service. Check that the necessary ports are open in your "
@@ -346,3 +348,7 @@ class DataFile:
             shutil.rmtree(temporary_directory)
         except FileNotFoundError as ex:
             logging.error(f'Could not delete the temporary folder: {ex}')
+
+
+class MD5Exception(Exception):
+    pass
