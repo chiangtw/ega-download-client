@@ -184,7 +184,7 @@ class DataFile:
             with open(utils.get_fname_md5(output_file), 'wb') as f:  # save good md5 in aux file for future re-use
                 f.write(received_file_md5.encode())
         else:
-            os.remove(output_file)
+            #os.remove(output_file)
             raise Exception(f"Download process expected md5 value '{check_sum}' but got '{received_file_md5}'")
 
     def download_file_slice_(self, args):

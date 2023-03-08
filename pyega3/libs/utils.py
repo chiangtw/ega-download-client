@@ -6,6 +6,7 @@ import time
 
 import requests
 from tqdm import tqdm
+from pathlib import Path
 
 
 def merge_bin_files_on_disk(target_file_name, files_to_merge, downloaded_file_total_size):
@@ -13,17 +14,17 @@ def merge_bin_files_on_disk(target_file_name, files_to_merge, downloaded_file_to
     start = time.time()
 
     with tqdm(total=int(downloaded_file_total_size), unit='B', unit_scale=True) as pbar:
-        os.rename(files_to_merge[0], target_file_name)
+        Path(target_file_name).touch()
         logging.debug(files_to_merge[0])
         if pbar:
             pbar.update(os.path.getsize(target_file_name))
 
         with open(target_file_name, 'ab') as target_file:
-            for file_name in files_to_merge[1:]:
+            for file_name in files_to_merge:
                 with open(file_name, 'rb') as f:
                     logging.debug(file_name)
                     copyfileobj(f, target_file, 65536, pbar)
-                os.remove(file_name)
+                #os.remove(file_name)
         pbar.close()
 
     end = time.time()
