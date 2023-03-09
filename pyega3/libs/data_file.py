@@ -112,7 +112,7 @@ class DataFile:
         check_sum = self.unencrypted_checksum
         options = {"destinationFormat": "plain"}
 
-        file_size -= 16  # 16 bytes IV not necesary in plain mode
+        #file_size -= 16  # 16 bytes IV not necesary in plain mode
 
         if os.path.exists(output_file) and utils.md5(output_file, file_size) == check_sum:
             DataFile.print_local_file_info('Local file exists:', output_file, check_sum)
